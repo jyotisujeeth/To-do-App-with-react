@@ -1,0 +1,71 @@
+import React from "react";
+import AmazonLogo from "../../Amazon_Logo.png";
+import { Link, useNavigate } from "react-router-dom";
+// import { Email } from '@mui/icons-material';
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { loginInitiate } from "../../redux/actions";
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { user } = useSelector((state) => state.data);
+  let dispatch = useDispatch();
+  let history = useNavigate();
+  useEffect(() => {
+    if (user) {
+      history.push("/");
+    }
+  }, [user, dispatch]);
+
+  const signIn = (e) => {
+    e.preventDefault();
+    dispatch(loginInitiate(email, password));
+    setEmail("");
+    setPassword("");
+  };
+  return (
+    <div className=" py-24 px-16 mx-96 my-24 text-lg bg-gray-200">
+      <Link to="/">
+        <img src={AmazonLogo} alt="Login-Logo" className="w-1/3" />
+      </Link>
+      <div className="">
+        <h1 className="font-bold">Sign In</h1>
+        <form>
+          <h3>Email</h3>
+          <input
+            type="text"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            placeholder="Email"
+          />
+          <h3>Password</h3>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            placeholder="Password"
+            className=""
+          />
+          <button
+            type="submit"
+            onClick={signIn}
+            className=" p-2  flex justify-between bg-yellow-400 w-auto border-y-8"
+          >
+            Sign In
+          </button>
+        </form>
+      </div>
+      <p>New to Amazon?</p>
+      <Link to="/register">
+        <button className="bg-gray-400 border-y-8">Create your Account</button>
+      </Link>
+    </div>
+  );
+};
+
+export default Login;
